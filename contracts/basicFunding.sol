@@ -39,8 +39,8 @@ contract CrowFunding{
         require(investorExitMap[msg.sender], "您未参与该众筹，无权执行该操作");        _;
     }
     // 构造函数初始化该众筹项目
-    constructor(string memory _projectName,uint _supportBalance,uint _targetBalance,uint _durationInSeconds)public{
-        creator = msg.sender;
+    constructor(string memory _projectName,uint _supportBalance,uint _targetBalance,uint _durationInSeconds,address payable _creator)public{
+        creator = _creator;
         projectName = _projectName;
         supportBalance = _supportBalance;
         targetBalance = _targetBalance;
