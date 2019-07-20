@@ -2,9 +2,11 @@ pragma solidity ^0.5.10;
 
 //"买电脑","100","300","5555555"
 //"买CPU","30","0x83ea36a764f46963a2bb024c43889a82a926a041"
-
+import './InvestorToFunding.sol';
 
 contract CrowFunding{
+    // 全局对象,用来存储传递过来的记录器合约
+    InvestorToFunding i2f;
     address payable public creator;//项目发起者
     string public projectName;//项目名称
     uint  public  supportBalance;//支持金额
@@ -39,7 +41,10 @@ contract CrowFunding{
         require(investorExitMap[msg.sender], "您未参与该众筹，无权执行该操作");        _;
     }
     // 构造函数初始化该众筹项目
-    constructor(string memory _projectName,uint _supportBalance,uint _targetBalance,uint _durationInSeconds,address payable _creator)public{
+    constructor(string memory _projectName,uint _supportBalance,uint _targetBalance,uint _durationInSeconds,address payable _creator,InvestorToFunding _i2f)public{
+        // 实例化全局对象
+        i2f = _i2f;
+        // 初始化一些变量
         creator = _creator;
         projectName = _projectName;
         supportBalance = _supportBalance;
@@ -52,6 +57,7 @@ contract CrowFunding{
         require(msg.value==supportBalance, "只能投资固定金额");
         investors.push(msg.sender);
         investorExitMap[msg.sender] = true;
+        i2f.joinFunding(msg.sender,this);
     }
     // 众筹失败退款
     function drawBack()public{
