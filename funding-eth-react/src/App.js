@@ -1,6 +1,7 @@
 import React from 'react';
 import web3 from './utils/InitWeb3'
 import contract from './eth/contracts'
+import TabCenter from './components/TabCenter';
 
 class App extends React.Component{ 
   constructor(){
@@ -19,6 +20,7 @@ class App extends React.Component{
     return (
       <div>
         您当前的地址为：{this.state.currentAccount}
+        <TabCenter />
       </div>
     );
   }
