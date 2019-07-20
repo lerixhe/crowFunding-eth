@@ -1,5 +1,9 @@
 pragma solidity ^0.5.10;
 
+//"买电脑","100","300","5555555"
+//"买CPU","30","0x83ea36a764f46963a2bb024c43889a82a926a041"
+
+
 contract CrowFunding{
     address payable public creator;//项目发起者
     string public projectName;//项目名称
@@ -12,7 +16,7 @@ contract CrowFunding{
     struct Request {
         string purpose;//用途介绍
         uint cost;//所需花费
-        address shopAddress; //向谁购买
+        address payable shopAddress; //向谁购买
         uint voteCount;//赞成票数
         mapping(address => bool) investorVotedMap;//记录是否已经投过票
         RequestStatus status;//申请状态
@@ -25,6 +29,15 @@ contract CrowFunding{
     }
     // 存储多个申请
     Request[] public requests;
+    // 修饰器，仅能被众筹发起者执行的函数
+    modifier  onlyCreator(){
+        require(msg.sender == creator, "您不是众筹发起人，无权执行该操作");
+        _;
+    }
+    // 修饰器，仅能被众筹投资者执行的函数
+    modifier  onlyInvestor(){
+        require(investorExitMap[msg.sender], "您未参与该众筹，无权执行该操作");        _;
+    }
     // 构造函数初始化该众筹项目
     constructor(string memory _projectName,uint _supportBalance,uint _targetBalance,uint _durationInSeconds)public{
         creator = msg.sender;
@@ -56,7 +69,7 @@ contract CrowFunding{
         return investors;
     }
     // 创建1个花费申请
-    function createRequest(string  memory _purpose,uint _cost,address _shopAddress) public {
+    function createRequest(string  memory _purpose,uint _cost,address payable _shopAddress) public onlyCreator {
         Request memory request = Request({
             purpose : _purpose,
             cost : _cost,
@@ -67,9 +80,7 @@ contract CrowFunding{
         requests.push(request);
     }
     // 批准1个花费申请
-    function approveRequest(uint index)public{
-        // 投资人才有权批准
-        require(investorExitMap[msg.sender], "您无投票权");
+    function approveRequest(uint index)public onlyInvestor{        // 投资人才有权批准
         // 根据传递的申请索引，获取该申请（引用传递）
         Request storage request = requests[index];
         // 确认之前没投过票，只能投1次
@@ -78,5 +89,17 @@ contract CrowFunding{
         // 投票
         request.voteCount++;
         request.investorVotedMap[msg.sender] = true;
+    }
+    // 完成花费请求
+    function finalizeRequest(uint index)public onlyCreator payable {
+        // 根据传递的申请索引，获取该申请（引用传递）
+        Request storage request = requests[index];
+        //申请合法判定：钱要够，要被半数批准过，
+        require(address(this).balance >= request.cost, "花费申请超支，被驳回");
+        require(request.voteCount*2 > investors.length, "投票赞成人数不足");
+        //转账
+        request.shopAddress.transfer(request.cost);
+        // 更新申请状态为已完成
+        request.status = RequestStatus.Completed;
     }
 }
