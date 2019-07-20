@@ -41,6 +41,10 @@ contract FundingFactory{
         creatorFundingMap[msg.sender].push(fundingContract);
 
     }
+    // 返回平台所有合约，自动生成的getter需要索引参数，不能返回数组。
+    function getAllFungdings()public view returns(CrowFunding[] memory){
+        return allCrowFundings;
+    }
     // 返回当前用户所创建的所有合约
     function getMyFungdings()public view returns(CrowFunding[] memory){
         return creatorFundingMap[msg.sender];

@@ -70,9 +70,9 @@ contract CrowFunding{
     function getCurrentBalance() public view returns(uint){
         return address(this).balance;
     }
-    // 查看投资人数
-    function getInvestorsCount() public view returns(uint){
-        return investors.length;
+    // 返回所有投资人
+    function getAllInvestors() public view returns(address payable[] memory){
+        return investors;
     }
     // 创建1个花费申请
     function createRequest(string  memory _purpose,uint _cost,address payable _shopAddress) public onlyCreator {
