@@ -1,6 +1,7 @@
 import React from 'react'
 import CardList from '../common/CardList'
 import { getCreatorFundingArray } from '../../eth/interaction'
+import CreatorFundingForm from './CreatorFundingForm'
 
 class CreatorFundingTab extends React.Component {
     constructor() {
@@ -22,6 +23,10 @@ class CreatorFundingTab extends React.Component {
         return (
             <div>
                 <CardList details={this.state.creatorFundingArray} />
+                <h2>发起众筹</h2>
+                <div>
+                    <CreatorFundingForm />
+                </div>     
             </div>
         )
     }

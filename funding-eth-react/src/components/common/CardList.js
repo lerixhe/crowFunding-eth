@@ -8,7 +8,7 @@ const CardList = (props) => {
         return <CustomizeCard key={i} detail={detail} />
     })
     return (
-        <Card.Group itemsPerRow={4}>
+        <Card.Group itemsPerRow={5}>
             {unFixedCards}
         </Card.Group>
     )

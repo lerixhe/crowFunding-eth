@@ -61,9 +61,24 @@ const getFundingDetail = async (funding)=>{
         console.log(error)
     }
 }
-
+// 创建众筹合约
+const createFunding = async(projectName,supportBalance,targetBalance,duration,callback)=>{
+    // 转换单位：
+    supportBalance = parseInt(parseFloat(supportBalance)*10**18).toString()
+    targetBalance = parseInt(parseFloat(targetBalance)*10**18).toString()
+   try {
+        let accounts = await web3.eth.getAccounts()
+        let result = await contracts.fundingFactoryContract.methods.createFunding(projectName,supportBalance,targetBalance,duration).send({
+            from:accounts[0]
+        },callback)
+        return result
+   } catch (error) {
+        console.log(error)
+   }
+}
 
 export {
     getCreatorFundingArray,
-    getFundingDetail
+    getFundingDetail,
+    createFunding
 }
