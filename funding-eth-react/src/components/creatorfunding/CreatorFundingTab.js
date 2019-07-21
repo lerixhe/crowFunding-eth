@@ -1,6 +1,6 @@
 import React from 'react'
 import CardList from '../common/CardList'
-import { getCreatorFundingArray } from '../../eth/interaction'
+import { getFundingArrayBy } from '../../eth/interaction'
 import CreatorFundingForm from './CreatorFundingForm'
 
 class CreatorFundingTab extends React.Component {
@@ -12,7 +12,7 @@ class CreatorFundingTab extends React.Component {
     }
     async componentDidMount() {
         try {
-            let creatorFundingArray = await getCreatorFundingArray();
+            let creatorFundingArray = await getFundingArrayBy(2);
             this.setState({ creatorFundingArray, })
             console.table(creatorFundingArray)
         } catch (error) {

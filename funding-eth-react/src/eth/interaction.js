@@ -19,13 +19,20 @@ import todate from '../utils/toDate'
 // }
 // const getCreatorFundingArray = util.promisify(contracts.fundingFactoryContract.methods.getMyFungdings().call)
 // 获取当前用户创建的所有众筹合约
-const getCreatorFundingArray = async () => {
+const getFundingArrayBy = async (tabkey) => {
     try {
         let accounts = await web3.eth.getAccounts();
         // 如果调用的合约方法中明确使用了msg.sender，那么必须传入from
-        let fundingArray = await contracts.fundingFactoryContract.methods.getMyFungdings().call({
-            from: accounts[0],
-        });
+        let fundingArray = []
+        if(tabkey === 1){
+            fundingArray = await contracts.fundingFactoryContract.methods.getAllFungdings().call({
+                from: accounts[0],
+            });
+        }else if(tabkey === 2){
+            fundingArray = await contracts.fundingFactoryContract.methods.getMyFungdings().call({
+                from: accounts[0],
+            });
+        }       
         // 已获得到众筹合约地址的集合，遍历获取其详情。按照索引循环效率较低，这里使用map()
         let details = fundingArray.map(funding => {
             return getFundingDetail(funding)
@@ -78,7 +85,7 @@ const createFunding = async(projectName,supportBalance,targetBalance,duration,ca
 }
 
 export {
-    getCreatorFundingArray,
+    getFundingArrayBy,
     getFundingDetail,
     createFunding
 }
