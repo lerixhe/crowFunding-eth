@@ -16,10 +16,10 @@ class App extends React.Component {
       let accounts = await web3.eth.getAccounts();
       this.setState({ currentAccount: accounts[0] })
       let fundingArray = await contracts.fundingFactoryContract.methods.getAllFungdings().call()
-      console.log(fundingArray)
+      console.table(fundingArray)
       let creatorFundingArray = await getCreatorFundingArray();
       this.setState({ creatorFundingArray })
-      console.log(creatorFundingArray)
+      console.table(creatorFundingArray)
     } catch (error) {
       console.log(error)
     }
