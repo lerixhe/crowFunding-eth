@@ -1,8 +1,7 @@
 import React from 'react';
 import web3 from './utils/InitWeb3'
-import contracts from './eth/contracts'
 import TabCenter from './components/TabCenter';
-import { getCreatorFundingArray } from './eth/interaction'
+import {Icon ,Header} from 'semantic-ui-react'
 
 class App extends React.Component {
   constructor() {
@@ -15,11 +14,6 @@ class App extends React.Component {
     try {
       let accounts = await web3.eth.getAccounts();
       this.setState({ currentAccount: accounts[0] })
-      let fundingArray = await contracts.fundingFactoryContract.methods.getAllFungdings().call()
-      console.table(fundingArray)
-      let creatorFundingArray = await getCreatorFundingArray();
-      this.setState({ creatorFundingArray })
-      console.table(creatorFundingArray)
     } catch (error) {
       console.log(error)
     }
@@ -27,7 +21,12 @@ class App extends React.Component {
   render() {
     return (
       <div>
-        您当前的地址为：{this.state.currentAccount}
+        <Header as='h2' icon textAlign='center'>
+          <Icon name='users' circular />
+          <Header.Content>区块链人人众筹</Header.Content>
+          您当前的地址为：{this.state.currentAccount}
+        </Header>
+            
         <TabCenter />
       </div>
     );

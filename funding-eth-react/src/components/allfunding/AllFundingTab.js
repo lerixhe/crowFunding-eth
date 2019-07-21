@@ -4,7 +4,7 @@ class AllFundingTab extends React.Component {
     render() {
         return (
             <div>
-                AllFundingTab
+                {/* AllFundingTab */}
         </div>
         );
     }

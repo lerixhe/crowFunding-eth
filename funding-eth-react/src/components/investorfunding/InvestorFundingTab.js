@@ -4,7 +4,7 @@ class InvestorFundingTab extends React.Component {
     render() {
         return (
             <div>
-                InvestorFundingTab
+                {/* InvestorFundingTab */}
         </div>
         )
     }
