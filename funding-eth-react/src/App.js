@@ -1,20 +1,28 @@
 import React from 'react';
 import web3 from './utils/InitWeb3'
-import contract from './eth/contracts'
+import contracts from './eth/contracts'
 import TabCenter from './components/TabCenter';
+import { getCreatorFundingArray } from './eth/interaction'
 
-class App extends React.Component{ 
-  constructor(){
+class App extends React.Component {
+  constructor() {
     super()
-    this.state={
-      currentAccount :""
+    this.state = {
+      currentAccount: ""
     }
   }
-  async componentDidMount(){
-    let accounts = await web3.eth.getAccounts();
-    this.setState({currentAccount:accounts[0]})
-    let fundingArray = await contract.methods.getAllFungdings().call()
-    console.log(fundingArray)
+  async componentDidMount() {
+    try {
+      let accounts = await web3.eth.getAccounts();
+      this.setState({ currentAccount: accounts[0] })
+      let fundingArray = await contracts.fundingFactoryContract.methods.getAllFungdings().call()
+      console.log(fundingArray)
+      let creatorFundingArray = await getCreatorFundingArray();
+      this.setState({ creatorFundingArray })
+      console.log(creatorFundingArray)
+    } catch (error) {
+      console.log(error)
+    }
   }
   render() {
     return (
