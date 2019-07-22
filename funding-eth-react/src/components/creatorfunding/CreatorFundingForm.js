@@ -29,10 +29,14 @@ class CreatorFundingForm extends React.Component {
         this.setState({active:true})
         // 开始创建合约
         try {
-           let result = await createFunding(projectName,supportBalance,targetBalance,duration,()=>{
-                alert(`创建成功`)
+           let result = await createFunding(projectName,supportBalance,targetBalance,duration,(error)=>{
+               if(error!==false){
+                alert(`创建失败${error}`)
                 this.setState({active:false})
+               }else{
+                alert(`创建成功`)
                 window.location.reload(true)
+               }
            })
            console.table(result)
         } catch (error) {

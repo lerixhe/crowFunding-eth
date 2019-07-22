@@ -28,33 +28,31 @@ class AllFundingForm extends React.Component {
     }
     // 表单变化时
     handleChange = (e,{name,value})=>this.setState({[name]:value})
-    // 创建众筹
+    // 参与众筹
     handleCreate = async() => {
-        const {projectName,supportBalance,targetBalance,duration  } = this.state
-        // let r = /^\+?[1-9][0-9]*$/;
+        const {supportBalance} = this.state
         let r = /^\d+(\.\d{1,18})?$/
-        let r2 = /^[1-9]\d*$/
         // 校验为数字
-        if(!r.test(supportBalance)||!r.test(targetBalance)||!r2.test(duration)||parseFloat(supportBalance) > parseFloat(targetBalance) ){
+        if(r.test(supportBalance)){
             alert(`输入的数据不合法！`)
-            // alert(r.test(supportBalance))
+            alert(r.test(supportBalance))
             // alert(r.test(targetBalance))
             // alert(r2.test(duration))
             return
         }
         this.setState({active:true})
         // 开始创建合约
-        try {
-           let result = await createFunding(projectName,supportBalance,targetBalance,duration,()=>{
-                alert(`创建成功`)
-                this.setState({active:false})
-                window.location.reload(true)
-           })
-           console.table(result)
-        } catch (error) {
-            this.setState({active:false})
-            console.log(`创建失败,${error}`)
-        }
+        // try {
+        //    let result = await createFunding(projectName,supportBalance,targetBalance,duration,()=>{
+        //         alert(`创建成功`)
+        //         this.setState({active:false})
+        //         window.location.reload(true)
+        //    })
+        //    console.table(result)
+        // } catch (error) {
+        //     this.setState({active:false})
+        //     console.log(`创建失败,${error}`)
+        // }
       }
 
 
@@ -67,9 +65,9 @@ class AllFundingForm extends React.Component {
                         <Loader>支持中</Loader>
                     </Dimmer>
                     <Form onSubmit={this.handleCreate}>
-                            <Form.Input required type='text' placeholder='项目名称' label='项目名称' name='projectName' value={this.state.selectedFunding.projectName || ''} onChange={this.handleChange}/> 
-                            <Form.Input required type='text' placeholder='项目地址' label='项目地址' name='funding' value={this.state.selectedFunding.funding || ''} onChange={this.handleChange}/>
-                            <Form.Input required type='text' placeholder='支持金额' label='支持金额' name='supportBalance' value={this.state.selectedFunding.supportBalance || ''} onChange={this.handleChange} labelPosition="left" >
+                            <Form.Input required type='text' disable placeholder='项目名称' label='项目名称' name='projectName' value={this.state.selectedFunding.projectName || ''} onChange={this.handleChange}/> 
+                            <Form.Input required type='text' disable placeholder='项目地址' label='项目地址' name='funding' value={this.state.selectedFunding.funding || ''} onChange={this.handleChange}/>
+                            <Form.Input required type='text' disable placeholder='支持金额' label='支持金额' name='supportBalance' value={this.state.selectedFunding.supportBalance || ''} onChange={this.handleChange} labelPosition="left" >
                                 <Label basic>eth</Label>
                                 <input />
                             </Form.Input>
