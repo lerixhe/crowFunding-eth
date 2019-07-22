@@ -7,15 +7,15 @@ class AllFundingTab extends React.Component {
     constructor() {
         super()
         this.state = {
-            creatorFundingArray: [],
+            allFundingArray: [],
         }
     }
     async componentDidMount() {
         // 根据选项获取众筹类型
         try {
-            let creatorFundingArray = await getFundingArrayBy(1);
-            this.setState({ creatorFundingArray, })
-            console.table(creatorFundingArray)
+            let allFundingArray = await getFundingArrayBy(1);
+            this.setState({ allFundingArray, })
+            console.table(allFundingArray)
         } catch (error) {
             console.log(error)
         }
@@ -30,7 +30,7 @@ class AllFundingTab extends React.Component {
         
         return (
             <div>
-                <CardList details={this.state.creatorFundingArray} onItemClick={this.onItemClick} />
+                <CardList details={this.state.allFundingArray} onItemClick={this.onItemClick} />
                 <h2>参与众筹</h2>
                 <div>
                     <AllFundingForm selectedFunding={this.state.selectedFunding}/>

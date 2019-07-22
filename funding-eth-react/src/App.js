@@ -27,6 +27,7 @@ class App extends React.Component {
         </Header> 
         <Header as='h5' textAlign='center'>您当前的地址为：{this.state.currentAccount}</Header>
         <TabCenter />
+        <img src='https://api.gushi.ci/all.svg' alt='poem' textAlign='center' />
       </div>
     );
   }
