@@ -3,12 +3,12 @@ import { Card, Image, Icon ,List ,Progress} from 'semantic-ui-react'
 
 // 本组件为card列表，里面有若干自定义cards,数量由众筹数确定,由母组件tab的details属性传递进props。
 const CardList = (props) => {
-    const { details } = props;
+    const { details,onItemClick } = props;
     let unFixedCards = details.map((detail, i) => {
-        return <CustomizeCard key={i} detail={detail} />
+        return <CustomizeCard key={i} detail={detail} onItemClick={onItemClick} />
     })
     return (
-        <Card.Group itemsPerRow={5}>
+        <Card.Group itemsPerRow={6}>
             {unFixedCards}
         </Card.Group>
     )
@@ -16,14 +16,14 @@ const CardList = (props) => {
 // 本组件为自定义card，内容由众筹详情确定，由母组件list的detail属性传递进props
 const src = '/images/elliot.jpg'
 const CustomizeCard = (props) => {
-    let {detail} = props
+    let {detail,onItemClick} = props
     // let { funding, creator, projectName, supportBalance, targetBalance, endTime, currentBalance, investorsCount } = detail
     let {projectName,  targetBalance, endTime, currentBalance, investorsCount } = detail
     // 计算百分比
     let percentage = (parseFloat(currentBalance)/parseFloat(targetBalance)).toFixed(2)*100 
     return (
         // <Card color='red' image={src} />
-        <Card color='blue'>
+        <Card color='red' onClick={()=> onItemClick(detail)}>
             <Image src={src} wrapped ui={false} />
             <Card.Content>
                 <Card.Header>{projectName}</Card.Header>

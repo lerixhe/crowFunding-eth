@@ -24,9 +24,8 @@ class App extends React.Component {
         <Header as='h2' icon textAlign='center'>
           <Icon name='users' circular />
           <Header.Content>区块链人人众筹</Header.Content>
-          您当前的地址为：{this.state.currentAccount}
-        </Header>
-            
+        </Header> 
+        <Header as='h5' textAlign='center'>您当前的地址为：{this.state.currentAccount}</Header>
         <TabCenter />
       </div>
     );

@@ -3,11 +3,27 @@ import React from 'react'
 import { createFunding } from '../../eth/interaction'
 import { Dimmer, Form, Label, Loader,Segment } from 'semantic-ui-react';
 
-class CreatorFundingForm extends React.Component {
+class AllFundingForm extends React.Component {
     constructor(){
         super()
         this.state={
-            active:false
+            active:false,
+            selectedFunding:{
+                projectName:"",
+                funding:"",
+                supportBalance:""
+            }
+        }
+    }
+    componentWillReceiveProps(props){
+        const {selectedFunding} = props
+        if(selectedFunding===undefined){
+            console.log(`空的`)
+            return 
+        }else{
+            console.log(`获取到了`)
+            console.table(selectedFunding)
+            this.setState({selectedFunding})
         }
     }
     // 表单变化时
@@ -40,34 +56,28 @@ class CreatorFundingForm extends React.Component {
             console.log(`创建失败,${error}`)
         }
       }
-    
+
+
     render(){
-        let {active,projectName,supportBalance,targetBalance,duration} = this.state
+        let {active} = this.state
         return(
             <div>
                 <Dimmer.Dimmable as={Segment} dimmed={active}>
                     <Dimmer inverted active={active}>
-                        <Loader>正在创建众筹合约</Loader>
+                        <Loader>支持中</Loader>
                     </Dimmer>
                     <Form onSubmit={this.handleCreate}>
-                            <Form.Input required type='text' placeholder='项目名称' label='项目名称' name='projectName' value={projectName || ''} onChange={this.handleChange}/>
-                            <Form.Input required type='text' placeholder='支持金额' label='支持金额' name='supportBalance' value={supportBalance || ''} onChange={this.handleChange} labelPosition="left" >
+                            <Form.Input required type='text' placeholder='项目名称' label='项目名称' name='projectName' value={this.state.selectedFunding.projectName || ''} onChange={this.handleChange}/> 
+                            <Form.Input required type='text' placeholder='项目地址' label='项目地址' name='funding' value={this.state.selectedFunding.funding || ''} onChange={this.handleChange}/>
+                            <Form.Input required type='text' placeholder='支持金额' label='支持金额' name='supportBalance' value={this.state.selectedFunding.supportBalance || ''} onChange={this.handleChange} labelPosition="left" >
                                 <Label basic>eth</Label>
                                 <input />
                             </Form.Input>
-                            <Form.Input required type='text' placeholder='目标金额' label='目标金额' name='targetBalance' value={targetBalance || ''} onChange={this.handleChange} labelPosition="left" >
-                                <Label basic>eth</Label>
-                                <input />
-                            </Form.Input>
-                            <Form.Input required type='text' placeholder='众筹时间' label='众筹时间' name='duration' value={duration || ''} onChange={this.handleChange} labelPosition="left" >
-                                <Label basic>秒</Label>
-                                <input />
-                            </Form.Input>
-                            <Form.Button primary content='创建众筹' />
+                            <Form.Button primary content='参与众筹' />
                     </Form>
                 </Dimmer.Dimmable>
             </div>
         )
     }
 }
-export default CreatorFundingForm
+export default AllFundingForm
