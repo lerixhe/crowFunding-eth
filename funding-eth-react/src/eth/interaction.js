@@ -83,9 +83,30 @@ const createFunding = async(projectName,supportBalance,targetBalance,duration,ca
         console.log(error)
    }
 }
+//参与某个众筹
+const investFunding = async (funding,supportBalance,callback)=>{
+    //转换单位
+    supportBalance = parseInt(parseFloat(supportBalance)*10**18).toString()
+    try {
+        let accounts = await web3.eth.getAccounts()
+        // 先获取特定合约的实例
+        let fundingContract =  contracts.getCrowFundingContracrt()
+        // 绑定合约实例到地址，完成实例获取
+        fundingContract.options.address = funding
+        // 开始调用合约方法：参与
+        fundingContract.methods.invest().send({
+            from:accounts[0],
+            value:supportBalance
+        },callback)
+        
+    } catch (error) {
+        console.log(error)
+    }
+}
 
 export {
     getFundingArrayBy,
     getFundingDetail,
-    createFunding
+    createFunding,
+    investFunding
 }

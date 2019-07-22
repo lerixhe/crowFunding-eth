@@ -1,6 +1,6 @@
 // 实现在页面创建众筹
 import React from 'react'
-import { createFunding } from '../../eth/interaction'
+import { investFunding } from '../../eth/interaction'
 import { Dimmer, Form, Label, Loader,Segment } from 'semantic-ui-react';
 
 class AllFundingForm extends React.Component {
@@ -26,33 +26,32 @@ class AllFundingForm extends React.Component {
             this.setState({selectedFunding})
         }
     }
-    // 表单变化时
-    handleChange = (e,{name,value})=>this.setState({[name]:value})
     // 参与众筹
     handleCreate = async() => {
-        const {supportBalance} = this.state
+        const {funding,supportBalance} = this.state.selectedFunding
         let r = /^\d+(\.\d{1,18})?$/
         // 校验为数字
-        if(r.test(supportBalance)){
+        if(!r.test(supportBalance)){
             alert(`输入的数据不合法！`)
-            alert(r.test(supportBalance))
-            // alert(r.test(targetBalance))
-            // alert(r2.test(duration))
             return
         }
         this.setState({active:true})
-        // 开始创建合约
-        // try {
-        //    let result = await createFunding(projectName,supportBalance,targetBalance,duration,()=>{
-        //         alert(`创建成功`)
-        //         this.setState({active:false})
-        //         window.location.reload(true)
-        //    })
-        //    console.table(result)
-        // } catch (error) {
-        //     this.setState({active:false})
-        //     console.log(`创建失败,${error}`)
-        // }
+        // 开始参与合约
+        try {
+           let result = await investFunding(funding,supportBalance,(error)=>{
+               if(error!==false){
+                    alert(`参与失败：${error}`) 
+                    this.setState({active:false})
+               }else{
+                    alert(`创建成功`)
+                    window.location.reload(true)
+               }
+           })
+           console.table(result)
+        } catch (error) {
+            this.setState({active:false})
+            console.log(`创建失败,${error}`)
+        }
       }
 
 
@@ -65,9 +64,9 @@ class AllFundingForm extends React.Component {
                         <Loader>支持中</Loader>
                     </Dimmer>
                     <Form onSubmit={this.handleCreate}>
-                            <Form.Input required type='text' disable placeholder='项目名称' label='项目名称' name='projectName' value={this.state.selectedFunding.projectName || ''} onChange={this.handleChange}/> 
-                            <Form.Input required type='text' disable placeholder='项目地址' label='项目地址' name='funding' value={this.state.selectedFunding.funding || ''} onChange={this.handleChange}/>
-                            <Form.Input required type='text' disable placeholder='支持金额' label='支持金额' name='supportBalance' value={this.state.selectedFunding.supportBalance || ''} onChange={this.handleChange} labelPosition="left" >
+                            <Form.Input required type='text'  placeholder='项目名称' label='项目名称' name='projectName' value={this.state.selectedFunding.projectName || ''} /> 
+                            <Form.Input required type='text'  placeholder='项目地址' label='项目地址' name='funding' value={this.state.selectedFunding.funding || ''} />
+                            <Form.Input required type='text'  placeholder='支持金额' label='支持金额' name='supportBalance' value={this.state.selectedFunding.supportBalance || ''} labelPosition="left" >
                                 <Label basic>eth</Label>
                                 <input />
                             </Form.Input>
