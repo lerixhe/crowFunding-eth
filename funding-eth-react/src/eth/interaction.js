@@ -107,10 +107,28 @@ const investFunding = async (funding,supportBalance,callback)=>{
         console.log(error)
     }
 }
+//创建1个花费请求
+const createRequet = async(funding,purpose,cost,shopAddress,callback)=>{
+    try {
+        let accounts = await web3.eth.getAccounts()
+        // 先获取特定合约的实例
+        let fundingContract =  contracts.getCrowFundingContracrt()
+        // 绑定合约实例到地址，完成实例获取
+        fundingContract.options.address = funding
+        // 开始调用合约方法：参与
+        await fundingContract.methods.createRequest(purpose,cost,shopAddress).send({
+            from:accounts[0],
+        },callback)
+        
+    } catch (error) {
+        console.log(error)
+    }
+}
 
 export {
     getFundingArrayBy,
     getFundingDetail,
     createFunding,
-    investFunding
+    investFunding,
+    createRequet
 }
