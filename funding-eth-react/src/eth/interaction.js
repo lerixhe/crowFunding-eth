@@ -32,6 +32,10 @@ const getFundingArrayBy = async (tabkey) => {
             fundingArray = await contracts.fundingFactoryContract.methods.getMyFungdings().call({
                 from: accounts[0],
             });
+        }else if(tabkey === 3){
+            fundingArray = await contracts.fundingFactoryContract.methods.getJoinedFungdings().call({
+                from: accounts[0],
+            })
         }       
         // 已获得到众筹合约地址的集合，遍历获取其详情。按照索引循环效率较低，这里使用map()
         let details = fundingArray.map(funding => {
@@ -94,7 +98,7 @@ const investFunding = async (funding,supportBalance,callback)=>{
         // 绑定合约实例到地址，完成实例获取
         fundingContract.options.address = funding
         // 开始调用合约方法：参与
-        fundingContract.methods.invest().send({
+        await fundingContract.methods.invest().send({
             from:accounts[0],
             value:supportBalance
         },callback)
