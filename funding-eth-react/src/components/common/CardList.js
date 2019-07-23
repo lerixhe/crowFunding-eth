@@ -20,7 +20,7 @@ const CustomizeCard = (props) => {
     // let { funding, creator, projectName, supportBalance, targetBalance, endTime, currentBalance, investorsCount } = detail
     let {projectName,  targetBalance, endTime, currentBalance, investorsCount } = detail
     // 计算百分比
-    let percentage = (parseFloat(currentBalance)/parseFloat(targetBalance)).toFixed(2)*100 
+    let percentage = parseInt((parseFloat(currentBalance)/parseFloat(targetBalance)).toFixed(2)*100) 
     return (
         // <Card color='red' image={src} />
         <Card color='red' onClick={()=> onItemClick(detail)}>

@@ -27,14 +27,18 @@ class AllFundingTab extends React.Component {
         this.setState({selectedFunding:detail})
     }
     render() {
+        const {selectedFunding} = this.state
         
         return (
             <div>
                 <CardList details={this.state.allFundingArray} onItemClick={this.onItemClick} />
-                <h2>参与众筹</h2>
-                <div>
-                    <AllFundingForm selectedFunding={this.state.selectedFunding}/>
-                </div>     
+                {   
+                    selectedFunding&&(
+                    <div>
+                        <h2>参与众筹</h2>
+                        <AllFundingForm selectedFunding={selectedFunding}/>
+                    </div>)
+                }
             </div>
         )
     }

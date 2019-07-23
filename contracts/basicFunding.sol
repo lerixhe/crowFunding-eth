@@ -88,7 +88,7 @@ contract CrowFunding{
     // 批准1个花费申请
     function approveRequest(uint index)public onlyInvestor{        // 投资人才有权批准
         // 根据传递的申请索引，获取该申请（引用传递）,注意不要越界
-        require(requests.length < index, "找不到对应的申请");
+        require(index < requests.length, "找不到对应的申请");
         Request storage request = requests[index];
         // 确认之前没投过票，只能投1次
         require(!request.investorVotedMap[msg.sender], "您已投过票了");
@@ -100,7 +100,7 @@ contract CrowFunding{
     // 完成花费请求
     function finalizeRequest(uint index)public onlyCreator payable {
         // 根据传递的申请索引，获取该申请（引用传递）,注意不要越界
-        require(requests.length < index, "找不到对应的申请");
+        require(index < requests.length,"找不到对应的申请");
         Request storage request = requests[index];
         //申请合法判定：钱要够，要被半数批准过，
         require(address(this).balance >= request.cost, "花费申请超支，被驳回");
@@ -109,5 +109,9 @@ contract CrowFunding{
         request.shopAddress.transfer(request.cost);
         // 更新申请状态为已完成
         request.status = RequestStatus.Completed;
+    }
+    // 获得本合约的全部申请数
+    function getRequestCount()public view returns(uint){
+        return requests.length;
     }
 }
